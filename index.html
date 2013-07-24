@@ -10,67 +10,66 @@
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
 	</head>
-	<body>
-		<!-- Start of first page I -->
-		<div data-role="page" id="page1">
-			<!-- Header -->
-			<div data-role="header">
-				<h1>Phonegap Template</h1>
+<body>
+    
+<div id="loginPage" data-role="page">
 
-			</div>
-			<!-- /header -->
-			<!-- Content    -->
-			<div data-role="content">
-				<h3>Content</h3>
-				<p>
-					Test Phone Gap 001
-				</p>
-			</div>
-			<!-- /content -->
-			<!-- footer -->
-			<div data-role="footer">
-				<h4>&copy; 2013 Chris Whyte</h4>
-			</div>
-			<!-- /footer -->
-		</div>
-		<!-- /page -->
-	</body>
+    <div data-role="header">
+        <h1>PhoneGap002</h1>
+    </div>
+
+    <div data-role="content">    
+
+        <form id="loginForm">
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="" placeholder="Username" />
+        </div>
+
+        <div data-role="fieldcontain" class="ui-hide-label">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" placeholder="Password" />
+        </div>
+
+        <input type="submit" value="Login" id="submitButton">
+        </form>
+        
+    </div>
+
+    <div data-role="footer">
+        <h4>&copy; Chris Whyte</h4>
+    </div>
+
+</div>
+
+</body>
 </html>
 <script>
 	
-
-document.addEventListener("deviceready", onDeviceReady, false);
-
-function onDeviceReady() {
-		
-		document.addEventListener("pause", onPause, false);
-		document.addEventListener("resume", onResume, false); 
-		document.addEventListener("menubutton", onMenuKeyDown, false); 
-}
+	document.addEventListener("deviceready", onDeviceReady, false);
 
 
-// Handle the menu button
-function onMenuKeyDown() {
-
-    
-    var devicePlatform = device.platform
-	var deviceName = device.name
-	var deviceVersion = device.version
-	var deviceCordova = device.cordova
-	document.write(devicePlatform + "<br>" + deviceName + "<br>" + "Version:" + deviceVersion + "<br>" + "Cordova:" + deviceCordova)	
-	
-}
-
-//What to do when paused
-function onPause(){
-	
-
-}
-
-//What to do when resumed
-function onResume()
+function onDeviceReady() 
 {
 	
-	alert("resume");
+	$("#loginForm").on("submit",function(e) 
+	{
+    //disable the button
+    //$("#submitButton",this).attr("disabled","disabled");
+	var u = $("#username", this).val();
+	var p = $("#password", this).val();	
+	 	if(u==p) 
+	  	{
+             navigator.notification.alert("Your login worked", function() {});
+              $.mobile.changePage("index.html");
+     	}
+     	else
+     	{
+     	navigator.notification.alert("Your function failed " + u + p , function() {});
+     	}
+	return false;
+
+	});
 }
+
 </script>
