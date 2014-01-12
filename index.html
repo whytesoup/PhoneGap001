@@ -2,56 +2,51 @@
 <html>
 	<title>&nbsp;</title>
 	<head>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-
- 		var pictureSource;   // picture source
-    	var destinationType; // sets the format of returned value 
-	
-
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
 		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
 		<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+ 		<script type="text/javascript" src="barcodescanner.js"></script>
+ 		var pictureSource;   // picture source
+    	var destinationType; // sets the format of returned value 
+
 	</head>
-<body>
-    
-<div id="loginPage" data-role="page">
-
-    <div data-role="header">
-        <h1>PhoneGap002</h1>
-    </div>
-
-    <div data-role="content">    
-
-        <form id="loginForm">
-        <div data-role="fieldcontain" class="ui-hide-label">
-            <label for="username">Username:</label>
-            <input type="text" name="username" id="username" value="" placeholder="Username" />
-        </div>
-
-        <div data-role="fieldcontain" class="ui-hide-label">
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" value="" placeholder="Password" />
-        </div>
-
-        <input type="submit" value="Login" id="submitButton">
-        </form>
-        
-    </div>
-    
-    <button onclick="capturePhoto();">Capture Photo</button> <br>
-    <button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
-    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
-    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
-    <img style="display:none;" id="largeImage" src="" />
+	<body>   
+		
+		<div id="loginPage" data-role="page">
+		    <div data-role="header">
+		        <h1>PhoneGap002</h1>
+		    </div>
+		    <div data-role="content">    
+			<form id="loginForm">
+			    <div data-role="fieldcontain" class="ui-hide-label">
+			    	<label for="username">Username:</label>
+			    	<input type="text" name="username" id="username" value="" placeholder="Username" />
+			    </div>
+				<div data-role="fieldcontain" class="ui-hide-label">
+			        <label for="password">Password:</label>
+			        <input type="password" name="password" id="password" value="" placeholder="Password" />
+			    </div>
+			        <input type="submit" value="Login" id="submitButton">
+			</form>      
+		</div>
+		
+	    <button onclick="capturePhoto();">Capture Photo</button> <br>
+	    <button onclick="scan();">Scan</button> <br>
+	    <!--<button onclick="capturePhotoEdit();">Capture Editable Photo</button> <br>
+	    //<button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>-->
+	    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+	    <img style="display:none;" id="largeImage" src="" />
 
 
-    <div data-role="footer">
-        <h4>&copy; Chris Whyte</h4>
-    </div>
+	    <div data-role="footer">
+	        <h4>&copy; Chris Whyte</h4>
+	    </div>
 
-</div>
+		</div>
 
 </body>
 </html>
@@ -133,25 +128,55 @@ function onPhotoURISuccess(imageURI) {
 
     // A button will call this function
     //
-    function capturePhotoEdit() {
+    //function capturePhotoEdit() {
       // Take picture using device camera, allow edit, and retrieve image as base64-encoded string  
-      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
-        destinationType: destinationType.DATA_URL });
-    }
+      //navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 20, allowEdit: true,
+      //  destinationType: destinationType.DATA_URL });
+    //}
 
     // A button will call this function
     //
-    function getPhoto(source) {
+    //function getPhoto(source) {
       // Retrieve image file location from specified source
-      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-        destinationType: destinationType.FILE_URI,
-        sourceType: source });
-    }
+      //navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        //destinationType: destinationType.FILE_URI,
+        //sourceType: source });
+    //}
 
     // Called if something bad happens.
     // 
     function onFail(message) {
       alert('Failed because: ' + message);
+    }
+
+  	function scan() {
+        console.log('scanning');
+        
+        var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+
+        scanner.scan( function (result) { 
+
+            alert("We got a barcode\n" + 
+            "Result: " + result.text + "\n" + 
+            "Format: " + result.format + "\n" + 
+            "Cancelled: " + result.cancelled);  
+
+           console.log("Scanner result: \n" +
+                "text: " + result.text + "\n" +
+                "format: " + result.format + "\n" +
+                "cancelled: " + result.cancelled + "\n");
+            document.getElementById("info").innerHTML = result.text;
+            console.log(result);
+            /*
+            if (args.format == "QR_CODE") {
+                window.plugins.childBrowser.showWebPage(args.text, { showLocationBar: false });
+            }
+            */
+
+        },
+        function (error) { 
+            console.log("Scanning failed: ", error); 
+        } );
     }
 
 
